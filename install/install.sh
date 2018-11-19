@@ -84,7 +84,7 @@ if [[ "$DB_TYPE" = "p" ]]; then
 else
     if command -v mysql > /dev/null; then
         echo "Importing database structure and data..."
-        MYSQL_PWD="$DB_PASSWORD" mysql -h "$DB_HOST" -U "$DB_USER" "$DB_NAME" < "install/my.sql"
+        MYSQL_PWD="$DB_PASSWORD" mysql -h "$DB_HOST" -U "$DB_USER" -D "$DB_NAME" < "install/my.sql"
         [[ "$?" != "0" ]] && echo "Database import failed." && exit 1
         echo "Database import successful."
     else
