@@ -25,11 +25,13 @@ class HomepagePresenter extends BasePresenter {
     }
 
     public function actionAdd(string $type) : void {
+        $this->setDefaultSnippets(['content']);
         $this->setView($type === 'text' ? '@textForm' : '@imageForm');
         $this->template->formName = $type . 'Form';
     }
 
     public function actionEdit(int $id) : void {
+        $this->setDefaultSnippets(['content']);
         $this->template->panel = $this->panel = $this->homepagePanelManager->get($id);
 
         if ($this->panel instanceof TextHomepagePanel) {
@@ -66,7 +68,6 @@ class HomepagePresenter extends BasePresenter {
         $this->redirect('this');
     }
 
-
     public function renderDefault() : void {
         $this->template->panels = $this->homepagePanelManager->lookup();
     }
@@ -96,7 +97,11 @@ class HomepagePresenter extends BasePresenter {
             $this->flashMessage('Panel byl přidán', 'success');
         }
 
-        $this->redirect('default');
+        $this->postGet('default');
+        $this->setView('default');
+        $this->redrawControl('content');
+        $this->closeDialog('editor');
+        unset($this->template->panel);
     }
 
     public function createComponentTextForm() : TextHomepagePanelForm {

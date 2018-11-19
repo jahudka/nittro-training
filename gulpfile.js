@@ -110,12 +110,27 @@ const adminBuilder = new nittro.Builder({
         forms: true,
         flashes: true
     },
+    extras: {
+        dialogs: true
+    },
     libraries: {
+        js: [
+            'src/assets/js/BootstrapErrorRenderer.js'
+        ],
         css: [
             'src/assets/css/admin.less'
         ]
     },
-    bootstrap: true,
+    bootstrap: {
+        params: {
+            dialogs: {
+                baseZ: 1100
+            }
+        },
+        services: {
+            formErrorRenderer: 'App.Forms.BootstrapErrorRenderer()'
+        }
+    },
     stack: true
 });
 

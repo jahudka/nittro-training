@@ -24,8 +24,8 @@
         <div class="col-12 col-sm-6 col-md-4 my-2">
             <div class="position-relative d-flex flex-fill rounded border border-dotted">
                 <div class="m-auto p-5 text-center">
-                    <a n:href="add text">přidat text</a><br />
-                    <a n:href="add image">přidat obrázek</a>
+                    <a n:href="add text" n:dialog.form="editor:content">přidat text</a><br />
+                    <a n:href="add image" n:dialog.form="editor:content">přidat obrázek</a>
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
             {/if}
         </div>
         <div class="ml-auto text-right">
-            <a n:href="edit $panel->id">upravit</a>
+            <a n:href="edit $panel->id" n:dialog.form="editor:content">upravit</a>
             |
             <a n:href="remove! $panel->id" onclick="return window.confirm('Opravdu chcete smazat tento panel?');" class="text-danger">smazat</a>
         </div>

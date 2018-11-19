@@ -5,9 +5,11 @@
 {/block}
 
 {block content}
+    <h1 class="h2 nittro-dialog-visible text-center mt-2 mb-4">{isset($panel) ? 'Úprava panelu' : 'Nový panel'}</h1>
+
     <div class="row">
-        <div id="panel-form" class="col-sm-8 col-md-6">
-            <form n:name="$formName">
+        <div id="panel-form" class="col-sm-8 col-md-6 col-dlg-full">
+            <form n:name="$formName" n:dialog.form="@self:content">
                 {block form-inputs}{/block}
                 <div class="form-group form-row">
                     <label n:name="publish_from" class="col-form-label col-sm-3">Zobrazovat od:</label>
@@ -18,6 +20,7 @@
                                 <button type="button" class="btn btn-outline-secondary">&times;</button>
                             </span>
                         </span>
+                        <div n:errors="publish_from" class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="form-group form-row">
@@ -29,12 +32,13 @@
                                 <button type="button" class="btn btn-outline-secondary">&times;</button>
                             </span>
                         </span>
+                        <div n:errors="publish_until" class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="form-group form-row">
-                    <div class="offset-sm-3 col-sm-9">
+                    <div class="offset-sm-3 col-sm-9 col-dlg-auto">
                         <button n:name="save" class="btn btn-primary">Uložit</button>
-                        <a n:href="default" class="btn btn-link">Zpět</a>
+                        <a n:href="default" data-action="cancel" class="btn btn-link">Zrušit</a>
                     </div>
                 </div>
             </form>
