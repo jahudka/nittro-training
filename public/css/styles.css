@@ -1,0 +1,62 @@
+body, html {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.flow-in {
+    animation: flow-in 400ms ease-out backwards;
+}
+
+.flow-delay-1 {
+    animation-delay: 200ms;
+}
+
+.flow-delay-2 {
+    animation-delay: 400ms;
+}
+
+.flow-delay-3 {
+    animation-delay: 600ms;
+}
+
+.grey {
+    filter: grayscale(100%);
+    transition: 200ms filter;
+}
+
+.grey:hover {
+    filter: grayscale(0);
+}
+
+
+#nav-toggle {
+    position: absolute;
+    left: -10000px;
+    top: -10000px;
+    width: 0;
+    height: 0;
+    border: none;
+    outline: none;
+    background: none;
+    opacity: 0;
+}
+
+#nav-toggle:checked + nav {
+    display: flex;
+}
+
+
+@keyframes flow-in {
+    0% {
+        opacity: 0;
+        transform: translateX(30%);
+    }
+
+    70% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

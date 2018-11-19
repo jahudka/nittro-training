@@ -1,0 +1,32 @@
+{layout './../@layout.latte'}
+
+{block scripts}
+    {if !$busy}
+        <script type="application/javascript" src="{$basePath}/js/html5sortable.min.js"></script>
+        <script type="application/javascript">
+            (function() {
+                var container = document.querySelector('#grid table tbody');
+
+                sortable(container, {
+                    forcePlaceholderSize: true
+                });
+
+                container.addEventListener('sortupdate', function () {
+                    var data = new FormData();
+
+                    [].slice.call(container.children).forEach(function(elem) {
+                        if ('id' in elem.dataset) {
+                            data.append('order[]', elem.dataset.id);
+                        }
+                    });
+
+                    fetch({link saveOrder!}, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        body: data
+                    });
+                });
+            })();
+        </script>
+    {/if}
+{/block}

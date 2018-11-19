@@ -1,0 +1,29 @@
+{block content}
+    <div class="flex flex-row flex-wrap -mx-4">
+        <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-4 flow-in">
+            <h3 class="text-2xl mb-2">Rezervace:</h3>
+            <a href="tel:+420{$contactInfo->reservationsPhone|replaceRE:'/\D+/':''}" class="text-4xl text-grey-darkest no-underline hover:text-black">
+                {$contactInfo->reservationsPhone}
+            </a>
+        </div>
+        <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-4 flow-in flow-delay-1">
+            {control contact}
+        </div>
+        <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-4 flow-in flow-delay-2">
+            <h3 class="text-2xl mb-2">Kontaktní údaje:</h3>
+            <strong>Adresa:</strong> {$contactInfo->address}<br />
+            <strong>Provozovatel:</strong> {$contactInfo->companyName}<br />
+
+            <strong>IČ:</strong> {$contactInfo->companyId},
+            <strong>IČP:</strong> {$contactInfo->premisesId}<br />
+
+            <strong>Odpovědný vedoucí:</strong>
+            {$contactInfo->representativeName}<br />
+
+            <strong>Telefon:</strong>
+            <a href="tel:+420{$contactInfo->representativePhone|replaceRE:'/\D+/':''}" class="text-grey-darkest no-underline hover:text-black">
+                {$contactInfo->representativePhone}
+            </a>
+        </div>
+    </div>
+{/block}

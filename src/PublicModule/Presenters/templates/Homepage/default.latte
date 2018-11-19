@@ -1,0 +1,92 @@
+{block head}
+    <link type="text/css" href="{$basePath}/css/photoswipe.min.css" rel="stylesheet" />
+    <link type="text/css" href="{$basePath}/css/photoswipe-skin.min.css" rel="stylesheet" />
+{/block}
+
+{block content}
+    <div class="flex flex-row flex-wrap items-center -mx-2">
+        {foreach $panels as $panel}
+            <div class="w-full sm:w-1/2 md:w-1/3 px-2 mb-4 text-center text-2xl flow-in flow-delay-{floor($panel->position / 3) + ($panel->position % 3)}">
+                {if $panel instanceof App\Model\Entity\TextHomepagePanel}
+                    {$panel->content|breaklines}
+                {else}
+                    <a href="{$basePath}/images/{$panel->id}.full.jpg" data-width="{$panel->width}" data-height="{$panel->height}" class="block picture grey">
+                        <img src="{$basePath}/images/{$panel->id}.sm.jpg" />
+                    </a>
+                {/if}
+            </div>
+        {/foreach}
+    </div>
+{/block}
+
+{block scripts}
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Zavřít (Esc)"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Přiblížit / oddálit"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Předchozí (šipka vlevo)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Následující (šipka vpravo)"></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript" src="{$basePath}/js/photoswipe.min.js"></script>
+    <script type="application/javascript" src="{$basePath}/js/photoswipe-ui-default.min.js"></script>
+    <script type="application/javascript">
+        (function() {
+            document.querySelector('main').addEventListener('click', function (evt) {
+                var btn = evt.target.closest('.picture');
+
+                if (btn) {
+                    evt.preventDefault();
+
+                    var idx = null;
+                    var elems = [].slice.call(document.querySelectorAll('main .picture'));
+                    var items = elems.map(function(elem, i) {
+                        if (elem === btn) {
+                            idx = i;
+                        }
+
+                        return {
+                            src: elem.href,
+                            w: +elem.dataset.width,
+                            h: +elem.dataset.height
+                        };
+                    });
+
+                    var gallery = new PhotoSwipe(document.querySelector('.pswp'), PhotoSwipeUI_Default, items, {
+                        modal: true,
+                        captionEl: false,
+                        fullscreenEl: false,
+                        shareEl: false,
+                        index: idx,
+                        getThumbBoundsFn: function(idx) {
+                            var pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+                            var rect = elems[idx].getBoundingClientRect();
+                            return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
+                        }
+                    });
+
+                    gallery.init();
+                }
+            });
+        })();
+    </script>
+{/block}

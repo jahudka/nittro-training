@@ -1,0 +1,87 @@
+{block header}
+    <h1 class="h2">Úvodní stránka</h1>
+{/block}
+
+{block content}
+    <div id="homepage-panels" class="row mb-4">
+        {foreach $panels as $panel}
+            <div class="col-12 col-sm-6 col-md-4 my-2" data-id="{$panel->id}">
+                {if $panel instanceof App\Model\Entity\TextHomepagePanel}
+                    <div class="position-relative d-flex flex-fill rounded bg-light border">
+                        <div class="m-auto p-5 text-center">
+                            {$panel->content|breaklines}
+                        </div>
+                        {include #controls panel => $panel}
+                    </div>
+                {else}
+                    <div class="position-relative image">
+                        <img class="d-block w-100 rounded" src="{$basePath}/images/{$panel->id}.sm.jpg" />
+                        {include #controls panel => $panel}
+                    </div>
+                {/if}
+            </div>
+        {/foreach}
+        <div class="col-12 col-sm-6 col-md-4 my-2">
+            <div class="position-relative d-flex flex-fill rounded border border-dotted">
+                <div class="m-auto p-5 text-center">
+                    <a n:href="add text">přidat text</a><br />
+                    <a n:href="add image">přidat obrázek</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{define #controls}
+    <div class="controls d-flex px-2 py-1 rounded-bottom small">
+        <div>
+            zobrazovat:
+            {if !$panel->publishFrom && !$panel->publishUntil}
+                vždy
+            {else}
+                {if $panel->publishFrom}
+                    od {$panel->publishFrom->format('j. n. Y')}
+                {/if}
+                {if $panel->publishUntil}
+                    do {$panel->publishUntil->format('j. n. Y')}
+                {/if}
+            {/if}
+        </div>
+        <div class="ml-auto text-right">
+            <a n:href="edit $panel->id">upravit</a>
+            |
+            <a n:href="remove! $panel->id" onclick="return window.confirm('Opravdu chcete smazat tento panel?');" class="text-danger">smazat</a>
+        </div>
+    </div>
+{/define}
+
+{block scripts}
+    <script type="application/javascript" src="{$basePath}/js/html5sortable.min.js"></script>
+    <script type="application/javascript">
+        (function() {
+            var container = document.getElementById('homepage-panels');
+
+            sortable(container, {
+                items: ':not(:last-child)',
+                placeholderClass: 'col-12 col-sm-6 col-md-4 my-2',
+                forcePlaceholderSize: true
+            });
+
+            container.addEventListener('sortupdate', function () {
+                var data = new FormData();
+
+                [].slice.call(container.children).forEach(function(elem) {
+                    if ('id' in elem.dataset) {
+                        data.append('order[]', elem.dataset.id);
+                    }
+                });
+
+                fetch({link saveOrder!}, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    body: data
+                });
+            });
+        })();
+    </script>
+{/block}

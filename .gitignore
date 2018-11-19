@@ -1,0 +1,5 @@
+/vendor
+/var
+/etc/config.local.neon
+/etc/contacts.json
+/public/images

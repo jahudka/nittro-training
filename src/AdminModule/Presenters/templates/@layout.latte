@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no" />
+
+        <title>Administrace</title>
+
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/admin.css" />
+
+        {block head}{/block}
+    </head>
+    <body n:class="$bodyClass ?? null">
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-nowrap p-0 shadow">
+            <a n:href="Dashboard:" class="navbar-brand col-md-3 col-lg-2 col mr-0">Administrace</a>
+
+            <ul class="navbar-nav">
+                <li class="nav-item text-nowrap d-none d-md-block">
+                    <a n:href="User:logout" class="nav-link px-3">Odhlásit</a>
+                </li>
+                <li class="nav-item sidebar-toggle d-md-none">
+                    <label for="inp-sidebar-toggle" class="nav-link px-3 py-0">&vellip;</label>
+                </li>
+            </ul>
+        </nav>
+
+        <div role="main" class="container-fluid">
+            <div class="row">
+                <input type="checkbox" id="inp-sidebar-toggle" />
+                <nav class="col-11 col-md-3 col-lg-2 bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a n:href="Dashboard:" n:class="$presenter->linkCurrent ? active, nav-link">
+                                    Přehled
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a n:href="Homepage:" n:class="$presenter->linkCurrent ? active, nav-link">
+                                    Úvodní stránka
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a n:href="Menu:" n:class="$presenter->linkCurrent ? active, nav-link">
+                                    Menu
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a n:href="Contacts:" n:class="$presenter->linkCurrent ? active, nav-link">
+                                    Kontakt
+                                </a>
+                            </li>
+                            <li class="nav-item d-md-none">
+                                <a n:href="User:logout" class="nav-link">
+                                    Odhlásit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <main role="main" class="main col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <div class="main-header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        {block header}{/block}
+                    </div>
+
+                    <div id="flashes">
+                        {foreach $flashes as $flash}
+                            <div class="alert alert-{$flash->type} alert-dismissible fade show" role="alert">
+                                {$flash->message}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Zavřít">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {/foreach}
+                    </div>
+
+                    <div class="main-content">
+                        {block content}{/block}
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <script type="application/javascript" src="{$basePath}/js/jquery-3.3.1.slim.min.js"></script>
+        <script type="application/javascript" src="{$basePath}/js/bootstrap.min.js"></script>
+        {block scripts}{/block}
+    </body>
+</html>

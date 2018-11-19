@@ -1,0 +1,76 @@
+{foreach $blockDefinitions as $path}
+    {import $path}
+{/foreach}
+
+<form n:name="editForm">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                {foreach $columns as $col}
+                    <th>{$col}</th>
+                {/foreach}
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $data as $row}
+                <tr data-id="{$row->id}">
+                    {if $row->id === $editing}
+                        {include #row-form row => $row, form => $form}
+                    {else}
+                        {include #row row => $row}
+                    {/if}
+                </tr>
+            {/foreach}
+            {if $adding}
+                <tr>
+                    {include #row-form form => $form}
+                </tr>
+            {/if}
+        </tbody>
+        <tfoot n:if="!$adding">
+            <tr>
+                <th colspan="{count($columns)}">&nbsp;</th>
+                <th class="text-right small">
+                    <a n:href="add!">přidat</a>
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+
+{define row}
+    {foreach $columns as $col => $label}
+        {ifset #col-$col}
+            {include #"col-$col" row => $row, value => $row->$col}
+        {else}
+            <td>{$row->$col}</td>
+        {/ifset}
+    {/foreach}
+    <td class="text-right small">
+        {foreach $actions as $action}
+            <a href="{(!empty($action['internal']) ? $control : $presenter)->link($action['link'], $row->id)}"{ifset $action['confirm']} onclick="return window.confirm({$action['confirm']});"{/ifset}>{$action['label']}</a>
+            {sep} | {/sep}
+        {/foreach}
+    </td>
+{/define}
+
+{define row-form}
+    {foreach $columns as $col => $label}
+        {ifset #field-$col}
+            {include #"field-$col" form => $form, col => $col, row => $row ?? null, first => $iterator->first}
+        {else}
+            <td class="p-1">
+                {ifset $form[$col]}
+                    {input $form[$col] class => 'form-control form-control-sm', autofocus => $iterator->first}
+                {elseifset $row}
+                    {$row->$col}
+                {/ifset}
+            </td>
+        {/ifset}
+    {/foreach}
+    <td class="p-1 text-right">
+        {input $form['save'] class => 'btn btn-sm btn-primary'}
+        <a n:href="this" class="btn btn-sm btn-link">zrušit</a>
+    </td>
+{/define}

@@ -1,0 +1,13 @@
+{layout './@form.latte'}
+
+{block form-inputs}
+    <div n:if="!isset($panel)" class="form-group form-row">
+        <label n:name="image" class="col-form-label col-sm-3">Vyberte obrázek:</label>
+        <div class="col-sm-9">
+            <input n:name="image" class="form-control" />
+            <span class="form-text text-muted">
+                Pouze obrázky typu JPG.
+            </span>
+        </div>
+    </div>
+{/block}

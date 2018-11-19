@@ -1,0 +1,67 @@
+{layout './../@layout.latte'}
+
+{block header}
+    <h1 class="h2">{isset($panel) ? 'Úprava panelu' : 'Nový panel'}</h1>
+{/block}
+
+{block content}
+    <div class="row">
+        <div id="panel-form" class="col-sm-8 col-md-6">
+            <form n:name="$formName">
+                {block form-inputs}{/block}
+                <div class="form-group form-row">
+                    <label n:name="publish_from" class="col-form-label col-sm-3">Zobrazovat od:</label>
+                    <div class="col-sm-9">
+                        <span class="input-group">
+                            <input n:name="publish_from" class="form-control" />
+                            <span class="input-group-append">
+                                <button type="button" class="btn btn-outline-secondary">&times;</button>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group form-row">
+                    <label n:name="publish_until" class="col-form-label col-sm-3">Zobrazovat do:</label>
+                    <div class="col-sm-9">
+                        <span class="input-group">
+                            <input n:name="publish_until" class="form-control" />
+                            <span class="input-group-append">
+                                <button type="button" class="btn btn-outline-secondary">&times;</button>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group form-row">
+                    <div class="offset-sm-3 col-sm-9">
+                        <button n:name="save" class="btn btn-primary">Uložit</button>
+                        <a n:href="default" class="btn btn-link">Zpět</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{/block}
+
+{block head}
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/flatpickr.min.css" />
+{/block}
+
+{block scripts}
+    <script type="application/javascript" src="{$basePath}/js/flatpickr.min.js"></script>
+    <script type="application/javascript" src="{$basePath}/js/flatpickr-cs.min.js"></script>
+    <script type="application/javascript">
+        (function() {
+            flatpickr('#panel-form input[type="date"]', {
+                locale: 'cs',
+                altInput: true,
+                altFormat: 'j. n. Y',
+                altInputClass: 'bg-white rounded-left'
+            });
+
+            $('#panel-form').on('click', '.input-group button', function (evt) {
+                evt.preventDefault();
+                $(this).closest('.input-group').find('input').val('');
+            });
+        })();
+    </script>
+{/block}

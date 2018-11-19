@@ -1,0 +1,65 @@
+{layout './@sortable.latte'}
+
+{block header}
+    <h1 class="h2">Menu &raquo; {$category->name}</h1>
+{/block}
+
+{block content}
+    <div class="row">
+        <div id="grid" class="col-12 col-md-9 col-lg-6">
+            {control items}
+        </div>
+    </div>
+{/block}
+
+{block scripts}
+    {include parent}
+
+    <script type="application/javascript">
+        (function() {
+            $('#grid').on('click', '[data-variant]', function (evt) {
+                evt.preventDefault();
+
+                var variant = $(this).closest('.input-group'),
+                    cell = variant.closest('td'),
+                    variants;
+
+                if (this.dataset.variant === 'remove') {
+                    variant.remove();
+                    variants = cell.children();
+
+                    if (variants.length === 1) {
+                        variants.removeClass('mt-1');
+                        variants.find('input[type="text"]').remove();
+                        variants.find('input[type="number"]').attr('name', 'price');
+                    } else {
+                        variants.first()
+                            .removeClass('mt-1')
+                            .find('input[type="text"]').attr('placeholder', 'výchozí varianta');
+                    }
+                } else {
+                    variants = cell.children();
+
+                    if (variants.length === 1) {
+                        variants.find('input[type="number"]').before(
+                            '<input name="variant[]" type="text" class="form-control w-auto" placeholder="výchozí varianta" />'
+                        );
+                    }
+
+                    this.dataset.variant = 'remove';
+                    this.innerHTML = '&times;';
+
+                    variant.after(
+                        '<span class="input-group input-group-sm mt-1">' +
+                            '<input name="variant[]" type="text" class="form-control w-auto" placeholder="varianta" />' +
+                            '<input name="price[]" type="number" min="0" step="1" size="3" class="form-control" placeholder="cena" />' +
+                            '<span class="input-group-append">' +
+                                '<button type="button" class="btn btn-outline-secondary" data-variant="add">+</button>' +
+                            '</span>' +
+                        '</span>'
+                    );
+                }
+            });
+        })();
+    </script>
+{/block}

@@ -1,0 +1,38 @@
+{define #col-price}
+    <td>
+        {if count($value) === 2 && is_numeric(key($value))}
+            {reset($value)}
+            {var $price = next($value)}
+            <small>/ {key($value)}: {$price}</small>
+        {else}
+            {foreach $value as $label => $price}
+                {if !is_numeric($label)}{$label}:{/if} {$price}
+                {sep}<br />{/sep}
+            {/foreach}
+        {/if}
+    </td>
+{/define}
+
+{define #field-price}
+    <td class="p-1">
+        {if !$row || count($row->price) === 1 && is_numeric(key($row->price))}
+            <span class="input-group input-group-sm">
+                <input name="price[]" type="number" min="0" step="1" size="3" class="form-control" value="{$row ? reset($row->price)}" />
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-outline-secondary" data-variant="add">+</button>
+                </span>
+            </span>
+        {else}
+            {foreach $row->price as $label => $price}
+                <span class="input-group input-group-sm{$iterator->first ? '' : ' mt-1'}">
+                    <input name="variant[]" type="text" class="form-control w-auto" placeholder="{$iterator->first ? 'výchozí '}varianta" value="{is_numeric($label) ? '' : $label}" />
+                    <input name="price[]" type="number" min="0" step="1" size="3" class="form-control" placeholder="cena" value="{$price}" />
+                    <span class="input-group-append">
+                        <button n:if="!$iterator->last" type="button" class="btn btn-outline-secondary" data-variant="remove">&times;</button>
+                        <button n:if="$iterator->last" type="button" class="btn btn-outline-secondary" data-variant="add">+</button>
+                    </span>
+                </span>
+            {/foreach}
+        {/if}
+    </td>
+{/define}

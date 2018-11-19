@@ -1,0 +1,14 @@
+<div>
+    <form n:name="form">
+        <label n:name="login" class="sr-only">Login</label>
+        <input n:name="login" class="form-control" placeholder="Login" autofocus />
+        <label n:name="password" class="sr-only">Heslo</label>
+        <input n:name="password" class="form-control" placeholder="Heslo" />
+        <div id="frm-login-form-errors" class="form-invalid-feedback invalid-feedback">
+            {foreach $form->getErrors() as $error}
+                <p class="error">{$error}</p>
+            {/foreach}
+        </div>
+        <button n:name="go" class="mt-3 btn btn-lg btn-primary btn-block">Přihlásit</button>
+    </form>
+</div>

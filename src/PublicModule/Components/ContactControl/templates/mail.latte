@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <meta charset="utf-8" />
+        <title>Nová zpráva v kontaktním formuláři</title>
+    </head>
+    <body>
+        <h1>Nová zpráva v kontaktním formuláři:</h1>
+
+        <p>{$text|breaklines}</p>
+
+        <p n:if="$email">
+            <strong>Odesílatel:</strong> {$email}<br />
+            <small>(lze odpovědět přímo na tuto zprávu)</small>
+        </p>
+    </body>
+</html>

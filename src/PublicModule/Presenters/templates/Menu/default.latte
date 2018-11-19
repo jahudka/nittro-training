@@ -1,0 +1,28 @@
+{block content}
+
+    <div class="flex flex-row flex-wrap -mx-4">
+        {foreach $categories as $category}
+            <div class="w-full lg:w-1/2 px-4 mb-4 flow-in flow-delay-{floor($category->position / 3) + ($category->position % 3)}">
+                <h2 class="mb-2">{$category->name}</h2>
+
+                <table class="w-full">
+                    <tbody>
+                        {foreach $category->items as $item}
+                            {var $nvariants = array_filter(array_keys($item->price), function($v) { return !is_numeric($v); })}
+                            <tr>
+                                <th class="text-left font-normal">
+                                    {$item->name}
+                                    {if $nvariants}
+                                        <small class="block md:inline">{(count($nvariants) < count($item->price) ? '/ ' : '') . implode(' / ', $nvariants)}</small>
+                                    {/if}
+                                </th>
+                                <td class="text-right">{implode(' / ', $item->price)}</td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        {/foreach}
+    </div>
+
+{/block}
