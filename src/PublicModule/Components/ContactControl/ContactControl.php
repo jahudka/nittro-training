@@ -9,27 +9,29 @@ use Nette\Application\UI\Control;
 use Nette\Http\IRequest;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
+use Nittro\Bridges\NittroUI\ComponentUtils;
 
 
 class ContactControl extends Control {
+    use ComponentUtils;
 
     private $mailer;
 
-    private $httpRequest;
-
     private $contactInfoManager;
+
+    private $sent = false;
 
 
     public function __construct(IMailer $mailer, IRequest $httpRequest, ContactInfoManager $contactInfoManager) {
         parent::__construct();
         $this->mailer = $mailer;
-        $this->httpRequest = $httpRequest;
         $this->contactInfoManager = $contactInfoManager;
+        $this->sent = (bool) $httpRequest->getQuery('sent');
     }
 
 
     public function render() : void {
-        $this->template->render(sprintf('%s/templates/%s.latte', __DIR__, $this->httpRequest->getQuery('sent') ? 'sent' : 'default'));
+        $this->template->render(sprintf('%s/templates/%s.latte', __DIR__, $this->sent ? 'sent' : 'default'));
     }
 
 
@@ -49,7 +51,13 @@ class ContactControl extends Control {
 
         $this->mailer->send($msg);
 
-        $this->presenter->redirect('this', ['sent' => true]);
+        if (!$this->getPresenter()->isAjax()) {
+            $this->redirect('this', ['sent' => true]);
+        }
+
+        $this->postGet('this');
+        $this->redrawControl('content');
+        $this->sent = true;
     }
 
     public function createComponentForm() : ContactForm {

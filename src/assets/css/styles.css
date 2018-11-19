@@ -6,6 +6,16 @@ body, html {
     animation: flow-in 400ms ease-out backwards;
 }
 
+.flow-in.nittro-transition-out {
+    transition-duration: 800ms;
+    animation-name: flow-out;
+    animation-fill-mode: forwards;
+}
+
+.flow-in.nittro-transition-middle {
+    opacity: 0;
+}
+
 .flow-delay-1 {
     animation-delay: 200ms;
 }
@@ -45,6 +55,20 @@ body, html {
 }
 
 
+.nittro-transition-dim.nittro-transition-out,
+.nittro-transition-dim.nittro-transition-in {
+    transition: opacity .3s, filter .3s;
+}
+
+.nittro-transition-dim.nittro-transition-out,
+.nittro-transition-dim.nittro-transition-middle {
+    filter: blur(2px);
+}
+
+.nittro-transition-dim::before {
+    background: rgba(248, 250, 252, 0.7);
+}
+
 @keyframes flow-in {
     0% {
         opacity: 0;
@@ -58,5 +82,22 @@ body, html {
     100% {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+
+@keyframes flow-out {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    30% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-30%);
     }
 }

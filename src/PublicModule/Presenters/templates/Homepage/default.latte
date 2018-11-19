@@ -12,9 +12,7 @@
             </div>
         {/foreach}
     </div>
-{/block}
 
-{block scripts}
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="pswp__bg"></div>
         <div class="pswp__scroll-wrap">
@@ -43,43 +41,54 @@
     </div>
 
     <script type="application/javascript">
-        (function() {
-            document.querySelector('main').addEventListener('click', function (evt) {
-                var btn = evt.target.closest('.picture');
+        _stack.push(function(di) {
+            di.getService('page').getSnippet({snippet.id content})
+                .setup(function() {
+                    var pswp = document.querySelector('.pswp');
+                    document.body.appendChild(pswp);
 
-                if (btn) {
-                    evt.preventDefault();
+                    document.querySelector('main').addEventListener('click', function (evt) {
+                        var btn = evt.target.closest('.picture');
 
-                    var idx = null;
-                    var elems = [].slice.call(document.querySelectorAll('main .picture'));
-                    var items = elems.map(function(elem, i) {
-                        if (elem === btn) {
-                            idx = i;
+                        if (btn) {
+                            evt.preventDefault();
+
+                            var idx = null;
+                            var elems = [].slice.call(document.querySelectorAll('main .picture'));
+                            var items = elems.map(function(elem, i) {
+                                if (elem === btn) {
+                                    idx = i;
+                                }
+
+                                return {
+                                    src: elem.href,
+                                    w: +elem.dataset.width,
+                                    h: +elem.dataset.height
+                                };
+                            });
+
+                            var gallery = new PhotoSwipe(pswp, PhotoSwipeUI_Default, items, {
+                                modal: true,
+                                captionEl: false,
+                                fullscreenEl: false,
+                                shareEl: false,
+                                history: false,
+                                index: idx,
+                                getThumbBoundsFn: function(idx) {
+                                    var pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+                                    var rect = elems[idx].getBoundingClientRect();
+                                    return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
+                                }
+                            });
+
+                            gallery.init();
                         }
-
-                        return {
-                            src: elem.href,
-                            w: +elem.dataset.width,
-                            h: +elem.dataset.height
-                        };
                     });
-
-                    var gallery = new PhotoSwipe(document.querySelector('.pswp'), PhotoSwipeUI_Default, items, {
-                        modal: true,
-                        captionEl: false,
-                        fullscreenEl: false,
-                        shareEl: false,
-                        index: idx,
-                        getThumbBoundsFn: function(idx) {
-                            var pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
-                            var rect = elems[idx].getBoundingClientRect();
-                            return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
-                        }
-                    });
-
-                    gallery.init();
-                }
-            });
-        })();
+                })
+                .teardown(function () {
+                    var pswp = document.querySelector('.pswp');
+                    pswp.parentNode.removeChild(pswp);
+                });
+        });
     </script>
 {/block}

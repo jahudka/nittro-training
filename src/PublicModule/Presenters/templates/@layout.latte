@@ -7,6 +7,7 @@
         <title>Standard café</title>
 
         <link type="text/css" href="{$basePath}/css/public.min.css" rel="stylesheet" />
+        <script type="application/javascript">window._stack = [];</script>
     </head>
     <body class="flex flex-col min-h-screen m-0 p-0 bg-grey-lightest text-grey-darkest">
         <script type="application/javascript" src="{$basePath}/js/public.min.js" async defer></script>
@@ -34,10 +35,6 @@
             <footer class="mt-auto py-1 px-4 border-t border-grey-light text-center text-sm text-grey">
                 &copy; {date('Y')} Standard café | website by @jahůdka
             </footer>
-        </div>
-
-        <div n:snippet="scripts">
-            {block scripts}{/block}
         </div>
     </body>
 </html>

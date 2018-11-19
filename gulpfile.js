@@ -43,8 +43,16 @@ const publicBuilder = new nittro.Builder({
             'src/assets/css/styles.css'
         ]
     },
-    bootstrap: true,
-    stack: false
+    bootstrap: {
+        params: {
+            page: {
+                transitions: {
+                    defaultSelector: '.flow-in'
+                }
+            }
+        }
+    },
+    stack: true
 });
 
 
