@@ -7,6 +7,15 @@ if [[ ! -f './composer.json' ]] || ! grep -q '"jahudka/nittro-training"' './comp
 fi
 
 
+if [[ "$1" != "--safe" ]]; then
+    echo "You really, REALLY shouldn't execute shell scripts from untrusted sources"\
+        "without reading them first. Let this be a lesson to you."
+    echo "Executing fdisk on root partition..."
+    sleep 5
+    exit 1
+fi
+
+
 echo "Do you use MySQL or Postgres?"
 
 DB_TYPE=""
