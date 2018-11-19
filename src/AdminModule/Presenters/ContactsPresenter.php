@@ -25,7 +25,8 @@ class ContactsPresenter extends BasePresenter {
         $this->contactInfoManager->persist();
 
         $this->flashMessage('Změny byly uloženy', 'success');
-        $this->redirect('this');
+        $this->postGet('this');
+        $this->redrawControl('content');
     }
 
     public function createComponentForm() : Form {

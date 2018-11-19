@@ -30,7 +30,7 @@ class LoginControl extends Control {
             $this->onLogin();
         } catch (AuthenticationException $e) {
             $form->addError('Neplatné přihlašovací údaje');
-            $this->redrawControl('form');
+            $this->redrawControl('content');
         }
     }
 

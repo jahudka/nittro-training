@@ -3,4 +3,14 @@
         <h1 class="h3 mb-3 font-weight-normal">Administrace</h1>
         {control login}
     </div>
+
+    <script type="application/javascript">
+        document.body.classList.toggle('login', true);
+
+        _stack.push(function (di) {
+            di.getService('page').getSnippet({snippet.id content}).teardown(function () {
+                document.body.classList.remove('login');
+            });
+        });
+    </script>
 {/block}

@@ -10,13 +10,11 @@
             {control items}
         </div>
     </div>
-{/block}
 
-{block scripts}
     {include parent}
 
     <script type="application/javascript">
-        (function() {
+        _stack.push(function() {
             $('#grid').on('click', '[data-variant]', function (evt) {
                 evt.preventDefault();
 
@@ -60,6 +58,6 @@
                     );
                 }
             });
-        })();
+        });
     </script>
 {/block}

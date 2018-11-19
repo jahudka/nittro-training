@@ -24,7 +24,7 @@ class GridControl extends Control {
 
     private $actions = [
         ['label' => 'upravit', 'link' => 'edit!', 'internal' => true],
-        ['label' => 'smazat', 'link' => 'remove!', 'internal' => true, 'confirm' => 'Opravdu chcete smazat tento záznam?'],
+        ['label' => 'smazat', 'link' => 'remove!', 'internal' => true, 'confirm' => 'Opravdu chcete smazat tento záznam?', 'remove' => true],
     ];
 
 
@@ -100,6 +100,7 @@ class GridControl extends Control {
 
 
     public function render() : void {
+        $this->redrawControl('imports');
         $this->template->blockDefinitions = $this->blockDefinitions;
         $this->template->columns = $this->columns;
         $this->template->actions = $this->actions;
@@ -114,22 +115,57 @@ class GridControl extends Control {
 
     public function handleAdd() : void {
         $this->adding = true;
+
+        if ($this->getPresenter()->isAjax()) {
+            $this->redrawControl('footer');
+            $this->redrawControl('list');
+            $this->data = [];
+        }
     }
 
     public function handleEdit(int $id) : void {
         $this->editing = $id;
+        $this->redrawControl('list');
     }
 
     public function handleRemove(int $id) : void {
         call_user_func($this->removeHandler, $id);
-        $this->redirect('this');
+
+        if ($this->getPresenter()->isAjax()) {
+            $this->getPresenter()->sendPayload();
+        } else {
+            $this->redirect('this');
+        }
+    }
+
+    public function handleCancel(?int $id = null) : void {
+        if ($id) {
+            $this->redrawControl('list');
+            $this->editing = $id;
+            $this->findEditedRow();
+            $this->editing = null;
+        } else {
+            $this->redrawControl('footer');
+        }
     }
 
 
     private function processEdit(Form $form, array $values) : void {
         $this->editing = !empty($values['id']) ? (int) $values['id'] : null;
-        call_user_func($this->saveHandler, $this->findEditedRow(), $values, $form);
-        $this->redirect('this');
+        $row = call_user_func($this->saveHandler, $this->findEditedRow(), $values, $form);
+
+        if ($this->getPresenter()->isAjax()) {
+            $this->redrawControl('list');
+
+            if (!$this->editing) {
+                $this->redrawControl('footer');
+            }
+
+            $this->editing = null;
+            $this->data[] = $row;
+        } else {
+            $this->redirect('this');
+        }
     }
 
     private function findEditedRow() {
@@ -154,6 +190,7 @@ class GridControl extends Control {
         if (!isset($form['id'])) {
             $form->addHidden('id');
         }
+
 
         if (!isset($form['save'])) {
             $form->addSubmit('save', 'uložit');

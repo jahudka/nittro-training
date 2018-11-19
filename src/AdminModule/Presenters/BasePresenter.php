@@ -19,6 +19,13 @@ abstract class BasePresenter extends Presenter {
         if (!$this->isPublic() && !$this->getUser()->isLoggedIn()) {
             $this->redirect('User:login');
         }
+
+        $this->setDefaultSnippets([
+            'navbar',
+            'sidebar',
+            'header',
+            'content',
+        ]);
     }
 
 }
