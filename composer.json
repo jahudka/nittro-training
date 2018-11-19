@@ -15,7 +15,8 @@
     "tracy/tracy": "^2.5",
     "kdyby/console": "^2.7",
     "kdyby/doctrine": "^3.3",
-    "nextras/mail-panel": "^2.4"
+    "nextras/mail-panel": "^2.4",
+    "nittro/nette-bridges": "^2.0"
   },
   "autoload": {
     "psr-4": {

@@ -6,15 +6,13 @@
 
         <title>Standard café</title>
 
-        <link type="text/css" href="{$basePath}/css/tailwind.min.css" rel="stylesheet" />
-        <link type="text/css" href="{$basePath}/css/source-sans-pro.css" rel="stylesheet" />
-        <link type="text/css" href="{$basePath}/css/styles.css" rel="stylesheet" />
-
-        {block head}{/block}
+        <link type="text/css" href="{$basePath}/css/public.min.css" rel="stylesheet" />
     </head>
     <body class="flex flex-col min-h-screen m-0 p-0 bg-grey-lightest text-grey-darkest">
+        <script type="application/javascript" src="{$basePath}/js/public.min.js" async defer></script>
+
         <div class="flex-grow flex flex-col container mx-auto px-4">
-            <header class="flex flex-row flex-wrap items-baseline pt-8 pb-2 px-4 border-b border-grey-light">
+            <header n:snippet="menu" class="flex flex-row flex-wrap items-baseline pt-8 pb-2 px-4 border-b border-grey-light">
                 <h1 class="text-3xl md:text-5xl">
                     <a n:href="Homepage:" class="text-grey-darkest no-underline">
                         Standard café
@@ -29,7 +27,7 @@
                 </nav>
             </header>
 
-            <main class="p-4">
+            <main n:snippet="content" class="p-4">
                 {block content}{/block}
             </main>
 
@@ -38,6 +36,8 @@
             </footer>
         </div>
 
-        {block scripts}{/block}
+        <div n:snippet="scripts">
+            {block scripts}{/block}
+        </div>
     </body>
 </html>
