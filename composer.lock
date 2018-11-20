@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef56320739e01aa492eec17f3b34fff3",
+    "content-hash": "0e7a549a96955ecc4b708ff6910d86e6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2371,6 +2371,45 @@
                 "mailpanel"
             ],
             "time": "2017-12-12T09:07:26+00:00"
+        },
+        {
+            "name": "nittro/nette-bridges",
+            "version": "v2.0.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nittro/nette-bridges.git",
+                "reference": "38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nittro/nette-bridges/zipball/38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c",
+                "reference": "38520b9617ab27d51a7de0b90dcbbd0ff7f3b37c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "latte/latte": "^2.4",
+                "nette/application": "^2.4",
+                "nette/di": "^2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dan Kadera",
+                    "email": "me@subsonic.cz"
+                }
+            ],
+            "description": "Nittro PHP bridges",
+            "homepage": "https://www.nittro.org/",
+            "time": "2018-09-24T18:43:53+00:00"
         },
         {
             "name": "symfony/console",

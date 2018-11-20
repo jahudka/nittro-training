@@ -6,15 +6,24 @@ body, html {
     animation: flow-in 400ms ease-out backwards;
 }
 
-.flow-delay-1 {
+.flow-in.nittro-transition-out {
+    transition-duration: 900ms;
+    animation: flow-out 300ms ease-in forwards;
+}
+
+.flow-in.nittro-transition-middle {
+    opacity: 0;
+}
+
+.flow-in.flow-delay-1 {
     animation-delay: 200ms;
 }
 
-.flow-delay-2 {
+.flow-in.flow-delay-2 {
     animation-delay: 400ms;
 }
 
-.flow-delay-3 {
+.flow-in.flow-delay-3 {
     animation-delay: 600ms;
 }
 
@@ -58,5 +67,22 @@ body, html {
     100% {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+
+@keyframes flow-out {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    70% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-30%);
     }
 }
