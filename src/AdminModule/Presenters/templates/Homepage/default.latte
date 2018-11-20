@@ -30,6 +30,33 @@
             </div>
         </div>
     </div>
+
+    <script type="application/javascript">
+        _stack.push(function(di) {
+            di.getService('page').getSnippet({snippet.id content})
+                .setup(function () {
+                    var container = document.getElementById('homepage-panels');
+
+                    sortable(container, {
+                        items: ':not(:last-child)',
+                        placeholderClass: 'col-12 col-sm-6 col-md-4 my-2',
+                        forcePlaceholderSize: true
+                    });
+
+                    container.addEventListener('sortupdate', function () {
+                        var order = [];
+
+                        [].slice.call(container.children).forEach(function(elem) {
+                            if ('id' in elem.dataset) {
+                                order.push(elem.dataset.id);
+                            }
+                        });
+
+                        di.getService('ajax').post({link saveOrder!}, { order: order });
+                    });
+                });
+        });
+    </script>
 {/block}
 
 {define #controls}
@@ -54,34 +81,3 @@
         </div>
     </div>
 {/define}
-
-{block scripts}
-    <script type="application/javascript" src="{$basePath}/js/html5sortable.min.js"></script>
-    <script type="application/javascript">
-        (function() {
-            var container = document.getElementById('homepage-panels');
-
-            sortable(container, {
-                items: ':not(:last-child)',
-                placeholderClass: 'col-12 col-sm-6 col-md-4 my-2',
-                forcePlaceholderSize: true
-            });
-
-            container.addEventListener('sortupdate', function () {
-                var data = new FormData();
-
-                [].slice.call(container.children).forEach(function(elem) {
-                    if ('id' in elem.dataset) {
-                        data.append('order[]', elem.dataset.id);
-                    }
-                });
-
-                fetch({link saveOrder!}, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    body: data
-                });
-            });
-        })();
-    </script>
-{/block}

@@ -108,7 +108,7 @@ const adminBuilder = new nittro.Builder({
     },
     libraries: {
         css: [
-            'src/assets/css/admin.css'
+            'src/assets/css/admin.less'
         ]
     }
 });

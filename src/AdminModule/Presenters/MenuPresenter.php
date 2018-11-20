@@ -63,16 +63,20 @@ class MenuPresenter extends BasePresenter {
         $grid = new GridControl();
         $grid->addColumn('name', 'Kategorie');
 
-        $grid->setDatasourceFactory(function() : array {
-            return $this->menuCategoryManager->lookup()->toArray();
+        $grid->setDatasourceFactory(function() use ($grid) : array {
+            return $grid->isEditing()
+                ? [ $this->menuCategoryManager->get($grid->getEditedRowId()) ]
+                : $this->menuCategoryManager->lookup()->toArray();
         });
 
-        $grid->setSaveHandler(function(?MenuCategory $category, array $values) {
+        $grid->setSaveHandler(function(?MenuCategory $category, array $values) : MenuCategory {
             if ($category) {
                 $this->menuCategoryManager->rename($category, $values['name']);
             } else {
-                $this->menuCategoryManager->create($values['name']);
+                $category = $this->menuCategoryManager->create($values['name']);
             }
+
+            return $category;
         });
 
         $grid->setRemoveHandler(function(int $id) : void {
@@ -107,11 +111,13 @@ class MenuPresenter extends BasePresenter {
         $grid->addColumn('name', 'Položka');
         $grid->addColumn('price', 'Cena');
 
-        $grid->setDatasourceFactory(function() : array {
-            return $this->menuItemManager->lookup()->inCategory($this->category)->toArray();
+        $grid->setDatasourceFactory(function() use ($grid) : array {
+            return $grid->isEditing()
+                ? [ $this->menuItemManager->get($grid->getEditedRowId()) ]
+                : $this->menuItemManager->lookup()->inCategory($this->category)->toArray();
         });
 
-        $grid->setSaveHandler(function(?MenuItem $item, array $values, Form $form) {
+        $grid->setSaveHandler(function(?MenuItem $item, array $values, Form $form) : MenuItem {
             $variants = $form->getHttpData(Form::DATA_LINE, 'variant[]');
             $prices = $form->getHttpData(Form::DATA_LINE, 'price[]');
 
@@ -130,8 +136,10 @@ class MenuPresenter extends BasePresenter {
             if ($item) {
                 $this->menuItemManager->update($item, $values['name'], $price);
             } else {
-                $this->menuItemManager->create($this->category, $values['name'], $price);
+                $item = $this->menuItemManager->create($this->category, $values['name'], $price);
             }
+
+            return $item;
         });
 
         $grid->setRemoveHandler(function(int $id) : void {

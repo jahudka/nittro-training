@@ -39,6 +39,7 @@ class UserPresenter extends BasePresenter {
     }
 
     protected function afterRender() {
+        parent::afterRender();
         $this->template->bodyClass = 'login';
     }
 

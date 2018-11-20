@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\AdminModule\Presenters;
 
-use Nette\Application\UI\Presenter;
+use Nittro\Bridges\NittroUI\Presenter;
 
 
 abstract class BasePresenter extends Presenter {
@@ -19,6 +19,13 @@ abstract class BasePresenter extends Presenter {
         if (!$this->isPublic() && !$this->getUser()->isLoggedIn()) {
             $this->redirect('User:login');
         }
+
+        $this->setDefaultSnippets([
+            'navbar',
+            'sidebar',
+            'header',
+            'content',
+        ]);
     }
 
 }

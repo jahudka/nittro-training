@@ -1,8 +1,11 @@
-{foreach $blockDefinitions as $path}
-    {import $path}
-{/foreach}
+{snippetArea "overrides"}
+    {foreach $blockDefinitions as $path}
+        {import $path}
+    {/foreach}
+{/snippetArea}
 
-<form n:name="editForm">
+<form n:name="editForm" data-history="false" data-transition="#{snippet.id list} .p-1" data-dynamic-remove="#{snippet.id item-0}">
+    {php $form['id']->setOption('rendered', true) }
     <table class="table table-sm">
         <thead>
             <tr>
@@ -12,27 +15,29 @@
                 <th>&nbsp;</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody n:snippet="list" n:dynamic="item-\d+" data-dynamic-element="tr.nittro-transition-fade">
             {foreach $data as $row}
-                <tr data-id="{$row->id}">
+                <tr n:snippet="item-$row->id" class="nittro-transition-fade">
                     {if $row->id === $editing}
-                        {include #row-form row => $row, form => $form}
+                        {include #row-form row => $row}
                     {else}
                         {include #row row => $row}
                     {/if}
                 </tr>
             {/foreach}
             {if $adding}
-                <tr>
-                    {include #row-form form => $form}
+                <tr id="{snippet.id item-0}" class="nittro-transition-fade">
+                    {php $this->global->snippetDriver->enter('item-0', 'dynamic') }
+                    {include #row-form}
+                    {php $this->global->snippetDriver->leave() }
                 </tr>
             {/if}
         </tbody>
-        <tfoot n:if="!$adding">
-            <tr>
+        <tfoot n:snippet="footer" class="nittro-transition-fade">
+            <tr n:if="!$adding">
                 <th colspan="{count($columns)}">&nbsp;</th>
                 <th class="text-right small">
-                    <a n:href="add!">přidat</a>
+                    <a n:href="add!" data-transition="#{snippet.id footer}" data-history="false">přidat</a>
                 </th>
             </tr>
         </tfoot>
@@ -49,18 +54,23 @@
     {/foreach}
     <td class="text-right small">
         {foreach $actions as $action}
-            <a href="{(!empty($action['internal']) ? $control : $presenter)->link($action['link'], $row->id)}"{ifset $action['confirm']} onclick="return window.confirm({$action['confirm']});"{/ifset}>{$action['label']}</a>
+            <a href="{(isset($action['internal']) ? $control : $presenter)->link($action['link'], $row->id)}"
+                {ifset $action['confirm']} onclick="return window.confirm({$action['confirm']});"{/ifset}
+                {ifset $action['remove']} data-dynamic-remove="#{snippet.id item-$row->id}"
+                {elseifset $action['internal']} data-transition="#{snippet.id item-$row->id}"
+                {/ifset}>{$action['label']}</a>
             {sep} | {/sep}
         {/foreach}
     </td>
 {/define}
 
 {define row-form}
+    {var $form = $control->getComponent('editForm')}
     {foreach $columns as $col => $label}
         {ifset #field-$col}
             {include #"field-$col" form => $form, col => $col, row => $row ?? null, first => $iterator->first}
         {else}
-            <td class="p-1">
+            <td class="p-1 nittro-transition-fade">
                 {ifset $form[$col]}
                     {input $form[$col] class => 'form-control form-control-sm', autofocus => $iterator->first}
                 {elseifset $row}
@@ -69,8 +79,9 @@
             </td>
         {/ifset}
     {/foreach}
-    <td class="p-1 text-right">
+    <td class="p-1 nittro-transition-fade text-right">
+        {input $form['id']}
         {input $form['save'] class => 'btn btn-sm btn-primary'}
-        <a n:href="this" class="btn btn-sm btn-link">zrušit</a>
+        <a n:href="cancel! id => $row->id ?? null"{ifset $row} data-transition="#{snippet.id item-$row->id}"{else} data-dynamic-remove="#{snippet.id item-0}"{/ifset} data-history="false" class="btn btn-sm btn-link">zrušit</a>
     </td>
 {/define}

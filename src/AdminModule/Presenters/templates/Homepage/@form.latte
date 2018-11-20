@@ -40,28 +40,28 @@
             </form>
         </div>
     </div>
-{/block}
 
-{block head}
-    <link rel="stylesheet" type="text/css" href="{$basePath}/css/flatpickr.min.css" />
-{/block}
-
-{block scripts}
-    <script type="application/javascript" src="{$basePath}/js/flatpickr.min.js"></script>
-    <script type="application/javascript" src="{$basePath}/js/flatpickr-cs.min.js"></script>
     <script type="application/javascript">
-        (function() {
-            flatpickr('#panel-form input[type="date"]', {
-                locale: 'cs',
-                altInput: true,
-                altFormat: 'j. n. Y',
-                altInputClass: 'bg-white rounded-left'
-            });
+        _stack.push(function(di) {
+            var pickers = null;
 
-            $('#panel-form').on('click', '.input-group button', function (evt) {
-                evt.preventDefault();
-                $(this).closest('.input-group').find('input').val('');
-            });
-        })();
+            di.getService('page').getSnippet('content')
+                .setup(function () {
+                    pickers = flatpickr('#panel-form input[type="date"]', {
+                        locale: 'cs',
+                        altInput: true,
+                        altFormat: 'j. n. Y',
+                        altInputClass: 'bg-white rounded-left'
+                    });
+
+                    $('#panel-form').on('click', '.input-group button', function (evt) {
+                        evt.preventDefault();
+                        $(this).closest('.input-group').find('input').val('');
+                    });
+                })
+                .teardown(function () {
+                    pickers = pickers && pickers.forEach(function(p) { p.destroy(); }) && null;
+                });
+        });
     </script>
 {/block}
