@@ -4,7 +4,8 @@
     <div n:if="!isset($panel)" class="form-group form-row">
         <label n:name="image" class="col-form-label col-sm-3">Vyberte obrázek:</label>
         <div class="col-sm-9">
-            <input n:name="image" class="form-control" />
+            <input n:name="image" n:class="$form['image']->hasErrors() ? is-invalid, form-control" />
+            <div n:errors="image" class="invalid-feedback"></div>
             <span class="form-text text-muted">
                 Pouze obrázky typu JPG.
             </span>

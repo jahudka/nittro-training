@@ -4,7 +4,8 @@
     <div class="form-group form-row">
         <label n:name="content" class="col-form-label col-sm-3">Text:</label>
         <div class="col-sm-9">
-            <textarea n:name="content" class="form-control" rows="5"></textarea>
+            <textarea n:name="content" n:class="$form['content']->hasErrors() ? is-invalid, form-control" rows="5"></textarea>
+            <div n:errors="content" class="invalid-feedback"></div>
         </div>
     </div>
 {/block}

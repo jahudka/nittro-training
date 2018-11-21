@@ -110,6 +110,9 @@ const adminBuilder = new nittro.Builder({
         dialogs: true
     },
     libraries: {
+        js: [
+            'src/assets/js/Forms/BootstrapErrorRenderer.js'
+        ],
         css: [
             'src/assets/css/admin.less'
         ]
@@ -119,6 +122,9 @@ const adminBuilder = new nittro.Builder({
             dialogs: {
                 baseZ: 1100
             }
+        },
+        services: {
+            formErrorRenderer: 'App.Forms.BootstrapErrorRenderer()'
         }
     }
 });
