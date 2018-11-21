@@ -311,3 +311,46 @@ body.login {
 .nittro-transition-dim::before {
     background: rgba(245, 245, 245, 0.7);
 }
+
+.nittro-dialog-visible {
+    display: none;
+}
+
+.nittro-dialog-holder .nittro-dialog-inner {
+    border-radius: 0 0 0.25rem 0.25rem;
+
+    .nittro-dialog-content {
+        padding: 1rem 2rem;
+
+        .nittro-dialog-visible {
+            display: block;
+        }
+
+        .col-dlg-full {
+            max-width: 100%;
+            flex: 0 0 100%;
+        }
+
+        .col-dlg-auto {
+            max-width: 100%;
+            flex: 0 0 auto;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .nittro-dialog-buttons {
+        padding: 0 2rem 1rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .nittro-dialog-holder .nittro-dialog-inner {
+        min-width: 500px;
+    }
+}

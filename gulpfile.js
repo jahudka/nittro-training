@@ -106,10 +106,20 @@ const adminBuilder = new nittro.Builder({
         forms: true,
         flashes: true
     },
+    extras: {
+        dialogs: true
+    },
     libraries: {
         css: [
             'src/assets/css/admin.less'
         ]
+    },
+    bootstrap: {
+        params: {
+            dialogs: {
+                baseZ: 1100
+            }
+        }
     }
 });
 

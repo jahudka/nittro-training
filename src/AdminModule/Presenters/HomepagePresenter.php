@@ -7,6 +7,7 @@ namespace App\AdminModule\Presenters;
 use App\AdminModule\Components\HomepagePanel\AbstractHomepagePanelForm;
 use App\AdminModule\Components\HomepagePanel\ImageHomepagePanelForm;
 use App\AdminModule\Components\HomepagePanel\TextHomepagePanelForm;
+use App\Model\Entity\AbstractHomepagePanel;
 use App\Model\Entity\TextHomepagePanel;
 use App\Model\Manager\HomepagePanelManager;
 
@@ -15,7 +16,7 @@ class HomepagePresenter extends BasePresenter {
 
     private $homepagePanelManager;
 
-    /** @var TextHomepagePanel */
+    /** @var AbstractHomepagePanel */
     private $panel;
 
 
@@ -25,11 +26,13 @@ class HomepagePresenter extends BasePresenter {
     }
 
     public function actionAdd(string $type) : void {
+        $this->setDefaultSnippets(['content']);
         $this->setView($type === 'text' ? '@textForm' : '@imageForm');
         $this->template->formName = $type . 'Form';
     }
 
     public function actionEdit(int $id) : void {
+        $this->setDefaultSnippets(['content']);
         $this->template->panel = $this->panel = $this->homepagePanelManager->get($id);
 
         if ($this->panel instanceof TextHomepagePanel) {
@@ -63,7 +66,7 @@ class HomepagePresenter extends BasePresenter {
         $panel = $this->homepagePanelManager->get($id);
         $this->homepagePanelManager->remove($panel);
         $this->flashMessage('Panel byl smazán', 'success');
-        $this->redirect('this');
+        $this->redirect('default');
     }
 
 
@@ -96,18 +99,28 @@ class HomepagePresenter extends BasePresenter {
             $this->flashMessage('Panel byl přidán', 'success');
         }
 
-        $this->redirect('default');
+        $this->postGet('default');
+        $this->setView('default');
+        $this->redrawControl('content');
+        $this->closeDialog('editor');
+        unset($this->template->panel);
+    }
+
+    private function processError() : void {
+        $this->redrawControl('content');
     }
 
     public function createComponentTextForm() : TextHomepagePanelForm {
         $form = new TextHomepagePanelForm();
         $form->onSuccess[] = \Closure::fromCallable([$this, 'savePanel']);
+        $form->onError[] = \Closure::fromCallable([$this, 'processError']);
         return $form;
     }
 
     public function createComponentImageForm() : ImageHomepagePanelForm {
         $form = new ImageHomepagePanelForm(isset($this->panel));
         $form->onSuccess[] = \Closure::fromCallable([$this, 'savePanel']);
+        $form->onError[] = \Closure::fromCallable([$this, 'processError']);
         return $form;
     }
 
